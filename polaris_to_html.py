@@ -97,7 +97,7 @@ def main(source_dir, target_dir):
         title = title.replace(":", " -")
         path = "{}/{}.html".format(target_dir, title)
 
-        with open(path, "w") as f:
+        with open(path, "w", encoding="utf8") as f:
             f.write(content)
 
         print("[{}/{}] {}".format(i + 1, count, path))
