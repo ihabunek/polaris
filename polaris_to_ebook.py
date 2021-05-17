@@ -6,6 +6,7 @@ ebooks can easily be generated.
 import os
 import re
 import sys
+import subprocess
 
 from collections import namedtuple
 from subprocess import call
@@ -26,7 +27,6 @@ def list_books(root):
         else:
             title = name
             author = ""
-
         yield Book(
             slug.upper(),
             title.strip().title(),
@@ -73,7 +73,7 @@ def process_book(book, root):
 
 def wrap_boilerplate(content, title):
     return """<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="hr-HR">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="sr-RS">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>{}</title>
@@ -97,10 +97,24 @@ def main(source_dir, target_dir):
         title = title.replace(":", " -")
         path = "{}/{}.html".format(target_dir, title)
 
+        print("[{}/{}] {}".format(i + 1, count, path))
+
         with open(path, "w", encoding="utf8") as f:
             f.write(content)
 
-        print("[{}/{}] {}".format(i + 1, count, path))
+        cmd = [
+            "ebook-convert",
+            path,
+            path.replace(".html", "") + ".epub",
+            "--title", book.title,
+            "--authors", book.author.replace("-","&").replace("/","&"),
+            "--output-profile", "kobo",
+            "--chapter", "//*[(name()='h1' or name()='h2' or name()='h3' or name()='h4')]",
+            "--level1-toc", "//h:h2",
+            "--level2-toc", "//h:h3",
+            "--level3-toc", "//h:h4",
+        ]
+        subprocess.run(cmd)
 
 
 if __name__ == '__main__':
