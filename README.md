@@ -19,22 +19,19 @@ Usage
 
 Requires python3 and calibre to be installed.
 
-To convert the books to single-page HTML files:
+To convert the books to ebook files:
 
 ```
-python3 polaris_to_html.py <path_to_polaris_cd> <output_directory>
+python3 polaris_to_ebook.py <path_to_polaris_cd> <output_directory>
 ```
 
-The second step is just a wrapper around `ebook-convert` tool which is included
-with Calibre. You can just use it directly to convert the books, but I made a
-script to simplify the conversion process. It's hardcoded to `mobi` (Kindle)
+The script will go through all books and convert them into html files.
+In the second step is uses a wrapper around `ebook-convert` tool which is included
+with Calibre to convert those html file to ebooks. It's hardcoded to `epub` (Tolino)
 format.
 
-Once the HTML has been generated, convert the ebooks:
-
-```
-python3 html_to_ebook.py "out/*.html"
-```
+NOTE: Original version from ihubanek/polaris uses two step process, but I had to
+merge those two steps into one to properly set ebook title and author.
 
 License
 -------
